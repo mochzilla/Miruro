@@ -1,0 +1,44 @@
+# Portainer-friendly stack: Miruro served on the LAN at http://<server-ip>:5173.
+#
+# Deploy in Portainer:
+#   Stacks → Add stack → name "miruro" → paste this file (or point at the repo).
+#   No environment variables are required for the basic case; set the optional
+#   ones below if you use AniList login.
+#
+# Optional Portainer stack environment variables:
+#   VITE_REDIRECT_URI   AniList callback URL, e.g. http://192.168.1.50:5173/callback
+#   VITE_CLIENT_ID      AniList OAuth client id
+#   VITE_CLIENT_SECRET  AniList OAuth client secret
+#
+# Tip: give your server a DHCP reservation in your router so the LAN IP stays
+# stable. If it ever changes you'll have to rebuild the TV app's APK.
+
+services:
+  miruro:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_BACKEND_URL: ${VITE_BACKEND_URL:-https://public-miruro-consumet-api.vercel.app/}
+        VITE_SKIP_TIMES: ${VITE_SKIP_TIMES:-https://api.aniskip.com/}
+        VITE_PROXY_URL: ${VITE_PROXY_URL:-https://corsproxy.io/}
+        VITE_API_KEY: ${VITE_API_KEY:-}
+        VITE_GA_MEASUREMENT_ID: ${VITE_GA_MEASUREMENT_ID:-}
+        VITE_DEPLOY_PLATFORM: ${VITE_DEPLOY_PLATFORM:-SELFHOSTED}
+        VITE_PORT: "5173"
+    image: miruro:latest
+    container_name: miruro
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_PORT: "5173"
+      VITE_CLIENT_ID: ${VITE_CLIENT_ID:-}
+      VITE_CLIENT_SECRET: ${VITE_CLIENT_SECRET:-}
+      VITE_REDIRECT_URI: ${VITE_REDIRECT_URI:-}
+    healthcheck:
+      test: ["CMD-SHELL", "bun -e \"fetch('http://localhost:'+(process.env.VITE_PORT||5173)).then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

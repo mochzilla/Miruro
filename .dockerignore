@@ -1,0 +1,42 @@
+# Version control
+.git
+.github
+.gitignore
+
+# Dependencies and build output (rebuilt inside the image)
+node_modules
+dist
+dist-ssr
+build
+out
+.bun
+.cache
+
+# Local env files — never bake secrets into the image
+.env
+.env.local
+.env.*.local
+
+# Editor / OS noise
+.idea
+.vscode
+.DS_Store
+*.swp
+*.swo
+
+# Logs and TS build cache
+*.log
+*.tsbuildinfo
+.eslintcache
+
+# Docs / configs not needed at build time
+README.md
+LICENSE
+renovate.json
+vercel.json
+.prettierrc
+.eslintrc.cjs
+
+# The Dockerfile itself doesn't need to be in its own context
+Dockerfile
+.dockerignore

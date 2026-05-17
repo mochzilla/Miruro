@@ -66,3 +66,11 @@ lerna-debug.log*
 *.swn
 *.swp
 *.orig
+
+# Android (tv-app/)
+local.properties
+.gradle/
+*.keystore
+*.jks
+*.iml
+captures/

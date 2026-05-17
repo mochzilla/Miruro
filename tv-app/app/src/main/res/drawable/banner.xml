@@ -1,0 +1,18 @@
+<!-- Android TV launcher banners must be 320x180. A vector is fine — replace this
+     with a proper PNG at res/drawable-xhdpi/banner.png whenever you want real art. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+
+    <path
+        android:fillColor="#0F0F12"
+        android:pathData="M0,0h320v180H0z" />
+
+    <!-- Stylized "M" mark in an orange accent. -->
+    <path
+        android:fillColor="#FF7733"
+        android:pathData="M110,55 L110,125 L130,125 L130,90 L160,125 L190,90 L190,125 L210,125 L210,55 L185,55 L160,90 L135,55 Z" />
+
+</vector>
