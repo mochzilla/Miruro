@@ -1,20 +1,3 @@
-# Portainer-friendly stack: Miruro served on the LAN at http://<server-ip>:5173.
-#
-# Deploy in Portainer:
-#   Stacks → Add stack → name "miruro" → paste this file (or point at the repo).
-#
-# Required Portainer stack environment variables:
-#   DOCKER_NETWORK      Name of an EXISTING Docker network for miruro to join.
-#                       Find candidates with `docker network ls` on the server.
-#
-# Optional Portainer stack environment variables:
-#   VITE_REDIRECT_URI   AniList callback URL, e.g. http://10.75.75.69:5173/callback
-#   VITE_CLIENT_ID      AniList OAuth client id
-#   VITE_CLIENT_SECRET  AniList OAuth client secret
-#
-# Tip: give your server a DHCP reservation in your router so the LAN IP stays
-# stable. If it ever changes you'll have to rebuild the TV app's APK.
-
 services:
   miruro:
     build:
@@ -31,10 +14,7 @@ services:
     image: miruro:latest
     container_name: miruro
     restart: unless-stopped
-    ports:
-      - "5173:5173"
-    networks:
-      - app_net
+    network_mode: "container:${VPN_CONTAINER:?Set VPN_CONTAINER in the Portainer stack env to the name of your VPN container}"
     environment:
       VITE_PORT: "5173"
       VITE_CLIENT_ID: ${VITE_CLIENT_ID:-}
@@ -46,11 +26,3 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
-
-networks:
-  # Joins an EXTERNAL pre-existing Docker network. Compose will NOT try to
-  # create it — it must already exist on the host. The actual name is taken
-  # from the DOCKER_NETWORK env var (set in the Portainer stack settings).
-  app_net:
-    external: true
-    name: ${DOCKER_NETWORK:?Set DOCKER_NETWORK in the Portainer stack env to an existing docker network name}
